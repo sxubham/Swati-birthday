@@ -63,7 +63,7 @@
         transform: translate(-50%, -50%);
         font-family: 'Dancing Script', cursive, sans-serif;
         /* MODIFIED: Use clamp for responsive font size */
-        font-size: clamp(2.5rem, 10vw, 3.5rem); /* Scales between 2.5rem and 3.5rem based on viewport width */
+        font-size: clamp(2.0rem, 10vw, 3.5rem); /* Adjusted minimum font size */
         color: #00aaff;
         font-weight: bold;
         z-index: 2;
@@ -72,8 +72,13 @@
         border-radius: 20px;
         box-shadow: 0 0 15px #fff;
         text-align: center;
-        white-space: nowrap; /* Kept as per original for stylistic choice, should be fine with clamp */
+        /* MODIFIED: Allow text to wrap for better mobile display */
+        white-space: normal;
+        word-break: break-word; /* Ensure long words break */
         transition: opacity 1s ease;
+        box-sizing: border-box; /* Include padding in width calculations */
+        width: 90%; /* Limit width to prevent overflow on very small screens */
+        max-width: 400px;
     }
 
     .heart {
@@ -158,6 +163,10 @@
         left: 50%;
         transform: translateX(-50%);
         display: flex;
+        /* MODIFIED: Try to keep menu items horizontal and allow wrapping */
+        flex-direction: row; /* Default to row */
+        flex-wrap: wrap; /* Allow items to wrap to next line */
+        justify-content: center; /* Center items horizontally */
         gap: 30px;
         background: rgba(255,255,255,0.8);
         padding: 15px 25px;
@@ -165,6 +174,8 @@
         box-shadow:0 5px 15px rgba(0,0,0,0.3);
         transition: bottom 0.5s ease;
         z-index:9;
+        max-width: 90%; /* Limit width to prevent overflow */
+        box-sizing: border-box; /* Include padding in width */
     }
     .start-menu.show { bottom: 100px; }
     .menu-item {
@@ -173,6 +184,8 @@
         color:#333;
         cursor:pointer;
         transition: transform 0.2s ease;
+        /* MODIFIED: Give menu items a min-width to prevent squishing */
+        min-width: 80px;
     }
     /* Enhanced hover effect for menu items */
     .menu-item:hover { transform:scale(1.2) translateY(-3px); }
@@ -188,9 +201,12 @@
         border-radius: 15px;
         box-shadow: 0 0 15px pink, 0 0 25px #ff69b4;
         padding: 20px;
-        /* MODIFIED: Responsive width for popups */
+        /* MODIFIED: Responsive width for popups, using vw for max-width on smaller screens */
         width: 90%; /* Take up 90% of viewport width */
-        max-width: 320px; /* But don't exceed 320px */
+        max-width: 320px; /* But don't exceed 320px for desktop */
+        /* MODIFIED: Flexible height based on content, but with a max */
+        height: auto; /* Let height adjust based on content */
+        min-height: fit-content; /* Ensure minimum height for content */
         max-height: 80vh; /* Ensures it doesn't exceed 80% of viewport height */
         overflow-y: auto; /* Adds scrollbar if content overflows max-height */
         text-align: center;
@@ -201,6 +217,10 @@
         z-index: 70;
         opacity: 0;
         box-sizing: border-box; /* Include padding in width/height */
+        display: flex; /* Use flexbox for internal content alignment */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Vertically center content if there's space */
     }
     /* Main pop-in animation for all popups */
     .popup-container.show {
@@ -330,7 +350,8 @@
         text-align: left;
         color: #333; /* Darker text for readability */
         font-size: 1.1rem;
-        min-height: 120px; /* Ensure consistent height */
+        /* MODIFIED: Remove min-height to allow content to dictate height */
+        min-height: auto; /* Allow height to adjust to content */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -376,12 +397,16 @@
         align-items:center;
         justify-content:center;
         padding-bottom:10px;
+        /* MODIFIED: Ensure slideshow height adapts better to image */
+        height: auto;
+        max-height: 75vh; /* Limit max height */
     }
     .slideshow.show { transform:translate(-50%, -50%) scale(1); }
     .slideshow img {
         max-width:100%; /* Ensure image scales down */
         height:auto; /* Maintain aspect ratio */
-        max-height:350px;
+        /* MODIFIED: Reduce max-height for images on mobile to fit better */
+        max-height:300px; /* Adjusted for better fit */
         object-fit:contain;
         border-bottom:2px solid #ff69b4;
         background:#fce4ec;
@@ -528,11 +553,14 @@
 
         /* Start Menu */
         .start-menu {
-            flex-direction: column; /* Stack items vertically */
-            gap: 15px; /* Reduce gap between stacked items */
+            /* MODIFIED: Keep flex-direction as row for horizontal layout, allow wrap */
+            flex-direction: row; /* Keep horizontal */
+            flex-wrap: wrap; /* Allow items to wrap to next line */
+            justify-content: center; /* Center items horizontally */
+            gap: 15px; /* Reduce gap between items */
             padding: 15px; /* Adjust padding */
             width: calc(100% - 60px); /* Full width minus padding */
-            max-width: 250px; /* Max width for menu on smaller screens */
+            max-width: 300px; /* Max width for menu on smaller screens */
             bottom: 80px; /* Adjust position to be above the button */
             box-sizing: border-box; /* Include padding in width */
         }
@@ -542,16 +570,20 @@
         .menu-item {
             font-size: 1.1rem; /* Slightly larger font for easier tapping */
             padding: 5px 0; /* Add some vertical padding */
+            min-width: 90px; /* Adjusted min-width for mobile menu items */
         }
 
         /* Popups - General adjustments for mobile */
         .popup-container {
             width: 90vw; /* Take up 90% of viewport width */
             max-width: 90vw; /* Ensure it doesn't exceed 90vw */
-            height: 80vh; /* Take up 80% of viewport height */
-            max-height: 80vh; /* Ensure it doesn't exceed 80vh */
+            height: auto; /* MODIFIED: Auto height for better content fit */
+            min-height: fit-content; /* MODIFIED: Minimum height based on content */
+            max-height: 85vh; /* Take up 85% of viewport height as max */
             padding: 15px; /* Reduce padding for smaller screens */
             font-size: 0.95rem; /* Slightly smaller font for popups */
+            /* Ensure content is centered if space allows */
+            justify-content: center;
         }
 
         .gift-popup {
@@ -560,13 +592,17 @@
         }
 
         .message-slideshow-popup p {
-            min-height: 100px; /* Adjust min-height for messages */
+            /* MODIFIED: Removed specific min-height to allow dynamic height based on content */
+            min-height: auto; /* Allow height to adjust to content */
             font-size: 1rem;
+            margin-bottom: 15px; /* Slightly reduced margin */
         }
 
         .slideshow {
             width: 95%; /* Make slideshow a bit wider within its popup */
             max-width: 95%;
+            height: auto; /* MODIFIED: Auto height for slideshow container */
+            max-height: 70vh; /* MODIFIED: Limit max height for slideshow popup */
         }
         .slideshow img {
             max-height: 250px; /* Limit image height on mobile */
@@ -597,8 +633,9 @@
     @media (max-width: 480px) {
         /* Further adjustments for very small screens */
         .birthday-text {
-            font-size: clamp(2rem, 12vw, 3rem); /* Adjust font size for very small screens */
+            font-size: clamp(1.8rem, 12vw, 2.5rem); /* Adjust font size for very small screens */
             padding: 10px 15px;
+            width: 95%; /* Make it slightly wider on very small screens to ensure text fits */
         }
 
         .clock {
@@ -611,22 +648,28 @@
         .start-button {
             padding: 10px 15px;
             font-size: 1rem;
+            width: calc(100% - 20px); /* Almost full width with small side padding */
         }
 
         .start-menu {
             gap: 10px;
             padding: 10px;
             bottom: 70px; /* Adjust position further */
+            max-width: 95%; /* Allow it to take more width */
         }
         .start-menu.show {
             bottom: 70px;
         }
         .menu-item {
             font-size: 1rem;
+            min-width: 70px; /* Even smaller min-width for very small screens */
+            flex-basis: auto; /* Allow items to determine their own width */
         }
 
         .popup-container {
             padding: 10px;
+            max-width: 95vw; /* Ensure popups are not too wide */
+            font-size: 0.9rem;
         }
 
         .gift-popup {
@@ -634,12 +677,22 @@
         }
 
         .message-slideshow-popup p {
-            min-height: 80px;
+            /* MODIFIED: Min-height removed or set to auto */
+            min-height: auto; /* Ensure no fixed min-height for messages */
             font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .slideshow {
+            max-height: 65vh; /* Tighter max height for very small screens */
+        }
+        .slideshow img {
+            max-height: 200px; /* Limit image height more on very small mobile */
         }
 
         .polaroid-gallery {
             padding: 5px;
+            max-height: 90vh; /* Tighter max height for gallery */
         }
         .polaroid-wrapper {
             padding: 5px;
