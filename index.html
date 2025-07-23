@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Swati</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: pink;
+        font-family: 'Quicksand', sans-serif;
+        position: relative;
+        height: 100vh;
+    }
+
+    /* Confetti CSS */
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #ff0;
+        border-radius: 50%;
+        opacity: 0.8;
+        z-index: 100;
+        animation: confettiFall 3s linear forwards;
+    }
+    @keyframes confettiFall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+
+    .kitty-container {
+        position: absolute;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('kitty.jpg') center/cover no-repeat; /* Restored original path */
+        transition: bottom 1.5s ease-out, opacity 1s ease; /* Added opacity for fading */
+        z-index: 1;
+    }
+    .kitty-container.show {
+        bottom: 0;
+        animation: bounce 1s ease-out 1;
+    }
+    @keyframes bounce {
+        0% {transform: translateY(0);}
+        60% {transform: translateY(-40px);}
+        80% {transform: translateY(15px);}
+        100% {transform: translateY(0);}
+    }
+
+    .birthday-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: 'Dancing Script', cursive, sans-serif;
+        /* MODIFIED: Use clamp for responsive font size */
+        font-size: clamp(2.5rem, 10vw, 3.5rem); /* Scales between 2.5rem and 3.5rem based on viewport width */
+        color: #00aaff;
+        font-weight: bold;
+        z-index: 2;
+        background: rgba(255,255,255,0.7);
+        padding: 15px 25px;
+        border-radius: 20px;
+        box-shadow: 0 0 15px #fff;
+        text-align: center;
+        white-space: nowrap; /* Kept as per original for stylistic choice, should be fine with clamp */
+        transition: opacity 1s ease;
+    }
+
+    .heart {
+        position: absolute;
+        bottom: 0;
+        width: 25px;
+        height: 25px;
+        background: red;
+        opacity: 0.7;
+        transform: rotate(45deg);
+        animation: float 6s linear infinite;
+        z-index: 0;
+    }
+    .heart:before, .heart:after {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background: red;
+        border-radius: 50%;
+    }
+    .heart:before {top:-12px;left:0;}
+    .heart:after {left:-12px;top:0;}
+    @keyframes float {
+        0% {transform: translateY(0) rotate(45deg); opacity:0.7;}
+        100% {transform: translateY(-100vh) rotate(45deg); opacity:0;}
+    }
+
+    .wallpaper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('wallpaper.jpg') center/cover no-repeat; /* Restored original path */
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+    }
+    .wallpaper.show { opacity: 1; z-index: 5; }
+
+    .clock {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: white;
+        background: rgba(0,0,0,0.4);
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 0 10px rgba(255,255,255,0.6);
+        z-index: 10; /* Ensure clock is above wallpaper */
+    }
+
+    .start-button {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 1.2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow to transition */
+        z-index:10;
+        pointer-events: none; /* Initially disable pointer events */
+    }
+    /* Enhanced hover effect for start button */
+    .start-button:hover {
+        background: #ff85c1;
+        transform: scale(1.05) translateY(-2px); /* Lifts slightly and scales a bit */
+        box-shadow: 0 6px 15px rgba(0,0,0,0.35); /* More pronounced shadow */
+    }
+
+    .start-menu {
+        position: absolute;
+        bottom: -120px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 30px;
+        background: rgba(255,255,255,0.8);
+        padding: 15px 25px;
+        border-radius: 20px;
+        box-shadow:0 5px 15px rgba(0,0,0,0.3);
+        transition: bottom 0.5s ease;
+        z-index:9;
+    }
+    .start-menu.show { bottom: 100px; }
+    .menu-item {
+        text-align:center;
+        font-size:1rem;
+        color:#333;
+        cursor:pointer;
+        transition: transform 0.2s ease;
+    }
+    /* Enhanced hover effect for menu items */
+    .menu-item:hover { transform:scale(1.2) translateY(-3px); }
+
+    /* General Popup Styling */
+    .popup-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: white;
+        border: 3px solid #ff69b4;
+        border-radius: 15px;
+        box-shadow: 0 0 15px pink, 0 0 25px #ff69b4;
+        padding: 20px;
+        /* MODIFIED: Responsive width for popups */
+        width: 90%; /* Take up 90% of viewport width */
+        max-width: 320px; /* But don't exceed 320px */
+        max-height: 80vh; /* Ensures it doesn't exceed 80% of viewport height */
+        overflow-y: auto; /* Adds scrollbar if content overflows max-height */
+        text-align: center;
+        font-size: 1rem;
+        color: #ff69b4;
+        /* Modified for general pop-in animation */
+        transition: opacity 0.5s ease; /* Keep opacity transition for general class toggle */
+        z-index: 70;
+        opacity: 0;
+        box-sizing: border-box; /* Include padding in width/height */
+    }
+    /* Main pop-in animation for all popups */
+    .popup-container.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* A slightly longer, springy pop */
+    }
+    /* General button hover for popups */
+    .popup-container button:not(.close-button) {
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .popup-container button:not(.close-button):hover {
+        background: #ff85c1; /* Lighter pink on hover */
+        transform: translateY(-2px); /* Slight lift */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25); /* Subtle shadow */
+    }
+
+    .popup-container .close-button {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #ff69b4;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        transition: transform 0.2s ease;
+        z-index: 101; /* Ensure close button is always on top */
+    }
+    .popup-container .close-button:hover {
+        transform: scale(1.2);
+    }
+
+    /* Gift Popup - MODIFIED for responsiveness */
+    .gift-popup {
+        /* MODIFIED: Responsive width and height, maintaining aspect ratio */
+        width: 80%; /* Take up 80% of popup-container's width */
+        max-width: 200px; /* But don't exceed 200px */
+        aspect-ratio: 1 / 1; /* Keep it square */
+        height: auto; /* Let height adjust based on aspect-ratio */
+        background: pink;
+        border-radius: 15px;
+        box-shadow:0 0 20px rgba(0,0,0,0.4);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction: column;
+        overflow:hidden; /* Changed from visible to hidden to contain contents */
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    /* The .gift-popup.show animation is now handled by the general .popup-container.show */
+    /* Only apply the shake animation to the GIFT POPUP when shown */
+    .gift-popup.show {
+        animation: shake 0.5s ease infinite alternate; /* ONLY apply shake here now */
+        opacity: 1; /* Ensure opacity is set, though popIn also handles it */
+    }
+    @keyframes shake {
+        0% {transform:translate(-50%,-50%) rotate(-2deg);}
+        100% {transform:translate(-50%,-50%) rotate(2deg);}
+    }
+    .gift-lid {
+        width:100%;
+        height:40px;
+        background:red;
+        border-radius:10px 10px 0 0;
+        transition: transform 0.8s ease;
+        transform-origin: bottom;
+    }
+    .gift-popup.open .gift-lid { transform: rotateX(150deg); }
+    .gift-box {
+        width:100%;
+        height:100%;
+        background:#ff99cc;
+        border-radius:0 0 10px 10px;
+        position:relative;
+    }
+    .gift-message {
+        margin-top:15px;
+        font-size:1.2rem;
+        color:#333;
+        opacity:0;
+        transition: opacity 1s ease;
+        text-align:center;
+    }
+    .gift-popup.open .gift-message {opacity:1;}
+    .gift-instructions { /* New style for tap to open text */
+        position: absolute;
+        bottom: 20px;
+        color: white;
+        font-size: 0.9rem;
+        text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    .gift-popup.open .gift-instructions {
+        opacity: 0; /* Hide once opened */
+    }
+
+
+    /* Special Date Popup Specific Styling */
+    .date-popup {
+        background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+        border: 3px solid #d82c61;
+        color: #d82c61;
+        padding: 30px;
+        font-size: 1.1rem;
+    }
+    @keyframes popIn {
+        0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+        80% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* Message Slideshow Popup */
+    .message-slideshow-popup {
+        z-index: 80; /* Higher z-index for slideshow */
+        padding: 15px; /* Adjust padding */
+    }
+    .message-slideshow-popup p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+        white-space: pre-wrap; /* Allows line breaks in content */
+        text-align: left;
+        color: #333; /* Darker text for readability */
+        font-size: 1.1rem;
+        min-height: 120px; /* Ensure consistent height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease;
+        opacity: 0;
+    }
+    .message-slideshow-popup p.active {
+        opacity: 1;
+    }
+    .message-slideshow-controls {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .message-slideshow-controls button {
+        flex: 1;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added transitions */
+    }
+    /* Applied general popup button hover here too */
+
+    /* Slideshow for Gift Photos - MODIFIED for responsiveness */
+    .slideshow {
+        /* MODIFIED: Responsive width for slideshow */
+        width: 90%; /* Take up 90% of popup-container's width */
+        max-width: 400px; /* But don't exceed 400px */
+        background:white;
+        border-radius:15px;
+        overflow:hidden;
+        box-shadow:0 0 20px rgba(0,0,0,0.5);
+        z-index:80;
+        transition: transform 0.5s ease;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        padding-bottom:10px;
+    }
+    .slideshow.show { transform:translate(-50%, -50%) scale(1); }
+    .slideshow img {
+        max-width:100%; /* Ensure image scales down */
+        height:auto; /* Maintain aspect ratio */
+        max-height:350px;
+        object-fit:contain;
+        border-bottom:2px solid #ff69b4;
+        background:#fce4ec;
+    }
+    .slideshow-controls {
+        display:flex;
+        justify-content:space-between;
+        width:100%;
+        margin-top:5px;
+    }
+    .slideshow-controls button {
+        flex:1;
+        padding:8px;
+        border:none;
+        background:#ff69b4;
+        color:white;
+        font-size:1rem;
+        cursor:pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added transitions */
+    }
+    /* Applied general popup button hover here too */
+
+    .download-btn {
+        margin-top:5px;
+        background:#4caf50;
+        color:white;
+        border:none;
+        padding:8px 15px;
+        border-radius:8px;
+        cursor:pointer;
+        font-size: 1.5rem; /* Make symbol larger */
+        display: flex; /* Allow centering content */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added transitions */
+    }
+    /* Enhanced hover for download button */
+    .download-btn:hover {
+        background: #5cb85c; /* A slightly lighter green */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    /* Memories Polaroid Popup */
+    .memories-intro-popup {
+        z-index: 65; /* Between gift-message-popup and slideshow */
+    }
+    .polaroid-gallery {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 80vw; /* Wider */
+        max-width: 800px; /* Max width */
+        height: 80vh; /* Taller */
+        max-height: 600px; /* Max height */
+        background: rgba(255, 255, 255, 0.9);
+        border: 3px solid #ff69b4;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        z-index: 90;
+        overflow: hidden; /* Gallery itself hides anything outside its bounds */
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        opacity: 0;
+        position: relative; /* For absolute positioning of polaroids/wrapper */
+    }
+    .polaroid-gallery.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        /* Using the same popIn animation for consistency */
+        animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    /* The wrapper will now contain the polaroids and be the draggable area */
+    .polaroid-wrapper {
+        position: absolute; /* Relative to polaroid-gallery */
+        top: 0;
+        left: 0;
+        width: 100%; /* Initially fill the gallery */
+        height: 100%; /* Initially fill the gallery */
+        padding: 20px; /* Add some internal padding so polaroids don't stick to edge */
+        box-sizing: border-box; /* Include padding in dimensions */
+    }
+
+    /* NEW: Polaroid Drop-In Animation Keyframes */
+    @keyframes polaroidDropIn {
+        0% { transform: translateY(-80px) rotate(0deg) scale(0.7); opacity: 0; }
+        60% { transform: translateY(10px) rotate(var(--initial-rot, 0deg)) scale(1.05); }
+        100% { transform: translateY(0) rotate(var(--initial-rot, 0deg)) scale(1); opacity: 1; }
+    }
+
+    .polaroid-item {
+        position: absolute; /* Crucial for dragging: allows direct top/left positioning */
+        background: white;
+        border: 1px solid #ddd;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        padding: 10px 10px 30px 10px; /* More space for text at bottom */
+        text-align: center;
+        /* opacity: 0; -- Removed as animation handles it */
+        /* MODIFIED: More flexible min-width for polaroids */
+        min-width: 120px; /* Allow smaller size on very small screens */
+        max-width: 200px;
+        cursor: grab; /* Make individual polaroids draggable */
+        user-select: none; /* Prevent text selection during drag */
+        touch-action: none; /* Prevent default touch actions like pan/zoom */
+
+        /* ADDED: Animation for polaroid entry */
+        opacity: 0; /* Ensures it starts invisible for the animation */
+        animation: polaroidDropIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Springy timing */
+        animation-delay: var(--delay, 0s); /* For staggered effect */
+        transform: rotate(var(--initial-rot, 0deg)); /* Retain initial random rotation */
+        transition: box-shadow 0.1s ease, transform 0.1s ease; /* For smooth drag lift */
+    }
+    .polaroid-item.is-dragging {
+        cursor: grabbing; /* Cursor while dragging */
+        z-index: 100; /* Bring to front when dragging */
+        box-shadow: 5px 5px 20px rgba(0,0,0,0.5); /* More pronounced shadow */
+        transform: rotate(var(--initial-rot, 0deg)) scale(1.05); /* Slightly larger when dragged */
+    }
+    .polaroid-item img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 5px;
+    }
+    .polaroid-item p {
+        font-size: 0.9rem;
+        color: #555;
+        margin: 0;
+    }
+
+    /* --- Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+        /* Start Button */
+        .start-button {
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for centering */
+            width: calc(100% - 40px); /* Full width minus padding */
+            max-width: 200px; /* Keep a reasonable max-width */
+            bottom: 20px; /* Ensure it's fully visible at the bottom */
+            padding: 15px 20px; /* Slightly larger touch target */
+            font-size: 1.1rem;
+        }
+
+        /* Start Menu */
+        .start-menu {
+            flex-direction: column; /* Stack items vertically */
+            gap: 15px; /* Reduce gap between stacked items */
+            padding: 15px; /* Adjust padding */
+            width: calc(100% - 60px); /* Full width minus padding */
+            max-width: 250px; /* Max width for menu on smaller screens */
+            bottom: 80px; /* Adjust position to be above the button */
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .start-menu.show {
+            bottom: 80px; /* Adjust position when shown */
+        }
+        .menu-item {
+            font-size: 1.1rem; /* Slightly larger font for easier tapping */
+            padding: 5px 0; /* Add some vertical padding */
+        }
+
+        /* Popups - General adjustments for mobile */
+        .popup-container {
+            width: 90vw; /* Take up 90% of viewport width */
+            max-width: 90vw; /* Ensure it doesn't exceed 90vw */
+            height: 80vh; /* Take up 80% of viewport height */
+            max-height: 80vh; /* Ensure it doesn't exceed 80vh */
+            padding: 15px; /* Reduce padding for smaller screens */
+            font-size: 0.95rem; /* Slightly smaller font for popups */
+        }
+
+        .gift-popup {
+            width: 70%; /* Adjust gift box size relative to its parent popup */
+            max-width: 180px; /* Smaller max-width for the gift box itself */
+        }
+
+        .message-slideshow-popup p {
+            min-height: 100px; /* Adjust min-height for messages */
+            font-size: 1rem;
+        }
+
+        .slideshow {
+            width: 95%; /* Make slideshow a bit wider within its popup */
+            max-width: 95%;
+        }
+        .slideshow img {
+            max-height: 250px; /* Limit image height on mobile */
+        }
+        .slideshow-controls button {
+            font-size: 0.85rem; /* Smaller font for slideshow controls */
+            padding: 6px;
+        }
+
+        .polaroid-gallery {
+            width: 95vw; /* Wider for gallery */
+            max-width: 95vw;
+            height: 85vh; /* Taller for gallery */
+            max-height: 85vh;
+            padding: 10px; /* Reduce padding for the gallery */
+        }
+        .polaroid-wrapper {
+            padding: 10px; /* Reduce padding for the wrapper */
+        }
+        .polaroid-item {
+            min-width: 100px; /* Allow polaroids to be smaller */
+            max-width: 150px; /* Max width for polaroids on mobile */
+            padding: 8px 8px 25px 8px; /* Adjust padding */
+            font-size: 0.8rem; /* Smaller font for captions */
+        }
+    }
+
+    @media (max-width: 480px) {
+        /* Further adjustments for very small screens */
+        .birthday-text {
+            font-size: clamp(2rem, 12vw, 3rem); /* Adjust font size for very small screens */
+            padding: 10px 15px;
+        }
+
+        .clock {
+            top: 10px;
+            right: 10px;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
+
+        .start-button {
+            padding: 10px 15px;
+            font-size: 1rem;
+        }
+
+        .start-menu {
+            gap: 10px;
+            padding: 10px;
+            bottom: 70px; /* Adjust position further */
+        }
+        .start-menu.show {
+            bottom: 70px;
+        }
+        .menu-item {
+            font-size: 1rem;
+        }
+
+        .popup-container {
+            padding: 10px;
+        }
+
+        .gift-popup {
+            max-width: 150px;
+        }
+
+        .message-slideshow-popup p {
+            min-height: 80px;
+            font-size: 0.9rem;
+        }
+
+        .polaroid-gallery {
+            padding: 5px;
+        }
+        .polaroid-wrapper {
+            padding: 5px;
+        }
+        .polaroid-item {
+            min-width: 80px; /* Even smaller polaroids */
+            max-width: 120px;
+            padding: 5px 5px 20px 5px;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="kitty-container"></div>
+<div class="birthday-text" id="birthdayText"></div>
+<div class="wallpaper" id="wallpaper">
+    <div class="clock" id="clock"></div>
+    <button class="start-button" id="startButton">Start</button>
+    <div class="start-menu" id="startMenu">
+        <div class="menu-item" id="giftItem"><span>🎁</span>Gift</div>
+        <div class="menu-item" id="messageItem"><span>💌</span>Message</div>
+        <div class="menu-item" id="dateItem"><span>📅</span>Date</div> <div class="menu-item" id="memoriesItem"><span>📸</span>Memories</div>
+        <div class="menu-item" id="aboutItem"><span>ℹ️</span>About</div>
+    </div>
+</div>
+
+<div class="popup-container start-popup" id="startPopup">
+    <h3>Let's begin the surprise, Swati! 🎀💖</h3>
+    <button id="okButton">OK</button>
+</div>
+
+<div class="popup-container gift-popup" id="giftPopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <div class="gift-lid"></div>
+    <div class="gift-box"></div>
+    <div class="gift-message">A special surprise just for you! 🎉💖</div>
+    <p class="gift-instructions">Tap to Open!</p>
+</div>
+
+<div class="popup-container gift-message-popup" id="giftMessagePopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <p>Hey Swatii, as i don't have your exact address unable to send you your birthday gift so here's a small gift that I made with the help of ChatGPT. Hope you'll like it.</p>
+    <button id="startSlideshow">OK</button>
+</div>
+
+<div class="popup-container slideshow" id="giftPhotoSlideshow"> <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <img id="slideImage" src="gift1.jpg" alt="Gift Photo"> <!-- Restored original path -->
+    <div class="slideshow-controls">
+        <button id="prevSlide">Previous</button>
+        <button id="nextSlide">Next</button>
+    </div>
+    <button class="download-btn" id="downloadSlide">&#x2B07;</button>
+</div>
+
+<div class="popup-container message-slideshow-popup" id="messageSlideshowPopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <p id="messageTextDisplay" class="active"></p>
+    <div class="message-slideshow-controls">
+        <button id="prevMessage">Previous</button>
+        <button id="toggleMessagePlay">Auto Play</button>
+        <button id="nextMessage">Next</button>
+    </div>
+</div>
+
+<div class="popup-container date-popup" id="datePopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <p id="dateMessageText"></p>
+    <button onclick="closeAllPopups()">OK</button>
+</div>
+
+<div class="popup-container memories-intro-popup" id="memoriesIntroPopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <p>I thought here I would put some photos of US but realized all are over texts only no together photos so here are some GPT merged cute US photos.</p>
+    <button id="showMemoriesGallery">OK</button>
+</div>
+
+<div class="popup-container polaroid-gallery" id="polaroidGallery">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <div class="polaroid-wrapper"></div>
+</div>
+
+<div class="popup-container about-popup" id="aboutPopup">
+    <button class="close-button" onclick="closeAllPopups()">&times;</button>
+    <h3>About this Surprise 💖</h3>
+    <p>This little web page was created with love and a bit of help from AI to celebrate your special day, Swati!</p>
+    <p>It's designed to bring a smile to your face and remind you of the good times.</p>
+    <p>Hope you enjoy exploring it! Wishing you the happiest of birthdays!</p>
+    <button onclick="closeAllPopups()">Got it!</button>
+</div>
+
+
+<script>
+    // Global variables for intervals to allow closeAllPopups to clear them
+    let giftSlideInterval;
+    let messageSlideInterval;
+    let messageAutoPlaying = false; // To keep track of message autoplay state
+
+    // The typeText function is kept because the initial "Happiest Birthday Princess" still uses it.
+    function typeText(text, elementId, speed = 80, callback = null) {
+        let i = 0;
+        const element = document.getElementById(elementId);
+        element.textContent = "";
+        const typing = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(typing);
+                if (callback) callback();
+            }
+        }, speed);
+    }
+
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const h = now.getHours().toString().padStart(2,'0');
+        const m = now.getMinutes().toString().padStart(2,'0');
+        const s = now.getSeconds().toString().padStart(2,'0');
+        document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+
+    // MODIFIED: More vibrant confetti burst
+    function createConfetti() {
+        const confettiColors = ["#ff0", "#f0f", "#0ff", "#0f0", "#f00", "#ff69b4", "#00ffff"]; // Added more colors
+        for (let i = 0; i < 60; i++) { // Increased number of confetti pieces
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            // Start confetti from around the center of the gift box area
+            confetti.style.left = (window.innerWidth / 2 + (Math.random() * 150 - 75)) + "px";
+            confetti.style.top = (window.innerHeight / 2 + (Math.random() * 100 - 50)) + "px";
+            confetti.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            confetti.style.width = confetti.style.height = (8 + Math.random() * 12) + "px"; // Larger and more varied sizes
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            confetti.style.animation = `confettiFall ${2 + Math.random() * 4}s linear forwards`; // Varied animation duration
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
+        }
+    }
+
+    function closeAllPopups() {
+        const popups = document.querySelectorAll('.popup-container.show');
+        popups.forEach(popup => popup.classList.remove('show', 'open'));
+
+        if (giftSlideInterval) {
+            clearInterval(giftSlideInterval);
+            giftSlideInterval = null;
+        }
+        if (messageSlideInterval) {
+            clearInterval(messageSlideInterval);
+            messageSlideInterval = null;
+        }
+        const toggleBtn = document.getElementById('toggleMessagePlay');
+        if (toggleBtn) toggleBtn.textContent = "Auto Play";
+        messageAutoPlaying = false;
+    }
+
+    window.onload = () => {
+        const kitty = document.querySelector('.kitty-container');
+        const wallpaper = document.getElementById('wallpaper');
+        const birthdayText = document.getElementById('birthdayText');
+        const startButton = document.getElementById('startButton');
+        const startMenu = document.getElementById('startMenu');
+
+        const giftPopup = document.getElementById('giftPopup');
+        const giftItem = document.getElementById('giftItem');
+        const startPopup = document.getElementById('startPopup');
+        const okButton = document.getElementById('okButton');
+
+        const giftMessagePopup = document.getElementById('giftMessagePopup');
+        const startSlideshowBtn = document.getElementById('startSlideshow');
+        const giftPhotoSlideshow = document.getElementById('giftPhotoSlideshow');
+        const slideImage = document.getElementById('slideImage');
+        const prevSlide = document.getElementById('prevSlide');
+        const nextSlide = document.getElementById('nextSlide');
+        const downloadSlide = document.getElementById('downloadSlide');
+
+        const messageItem = document.getElementById('messageItem');
+        const messageSlideshowPopup = document.getElementById('messageSlideshowPopup');
+        const messageTextDisplay = document.getElementById('messageTextDisplay');
+        const prevMessage = document.getElementById('prevMessage');
+        const nextMessage = document.getElementById('nextMessage');
+        const toggleMessagePlay = document.getElementById('toggleMessagePlay');
+
+        const dateItem = document.getElementById('dateItem');
+        const datePopup = document.getElementById('datePopup');
+        const dateMessageText = document.getElementById('dateMessageText');
+
+        const memoriesItem = document.getElementById('memoriesItem');
+        const memoriesIntroPopup = document.getElementById('memoriesIntroPopup');
+        const showMemoriesGalleryBtn = document.getElementById('showMemoriesGallery');
+        const polaroidGallery = document.getElementById('polaroidGallery');
+        const polaroidWrapper = document.querySelector('#polaroidGallery .polaroid-wrapper');
+
+        const aboutItem = document.getElementById('aboutItem');
+        const aboutPopup = document.getElementById('aboutPopup');
+
+        // Restored original local image paths
+        const giftPhotos = ["gift1.jpg","gift2.jpg","gift3.jpg","gift4.jpg","gift5.jpg","gift6.jpg","gift7.jpg"];
+        let currentGiftSlide = 0;
+
+        const messages = [
+            "Hey Swati, today's your special day, your birthday. You are the person who brought peace into my life. Life feels so peaceful around you, even over texts. Time passes so smoothly around you. Though we don't talk now, I still thank the universe and hate the universe at the same time. Your presence feels soft, safe. Your voice calms me so much. You are the most amazing and strongest woman I have seen in my life.",
+            "As we don't talk now, but through this, I want to say that as we step into this new chapter, I want you to be strong. I'll always be here. I hope you overcome your every fear. I hope you achieve all your desires, and I am sure you'll achieve them. You are capable of achieving everything; you are smart, strong...",
+            "...and I have your address, you should be cautious a little. 😉"
+        ];
+        let currentMessageSlide = 0;
+
+        // Restored original local image paths
+        const memoryPhotos = [
+            { src: "memory1.jpg", caption: "My lock screen" },
+            { src: "memory2.jpg", caption: "The first picture of" },
+            { src: "memory3.jpg", caption: "US that i showed you." },
+            { src: "memory4.jpg", caption: "CUTU US." },
+            { src: "memory5.jpg", caption: "Hoping to recreate this." }
+        ];
+
+        // --- Gift Photo Slideshow Logic ---
+        function showGiftSlide(index) {
+            currentGiftSlide = (index + giftPhotos.length) % giftPhotos.length;
+            slideImage.src = giftPhotos[currentGiftSlide];
+            downloadSlide.setAttribute("onclick", `window.open('${giftPhotos[currentGiftSlide]}', '_blank')`);
+        }
+
+        function startAutoGiftSlide() {
+            stopAutoGiftSlide();
+            giftSlideInterval = setInterval(() => { showGiftSlide(currentGiftSlide + 1); }, 3000);
+        }
+        function stopAutoGiftSlide() { clearInterval(giftSlideInterval); giftSlideInterval = null; }
+
+        // --- Message Slideshow Logic ---
+        function showMessageSlide(index) {
+            const oldMessage = document.querySelector('.message-slideshow-popup p.active');
+            if (oldMessage) oldMessage.classList.remove('active');
+
+            currentMessageSlide = (index + messages.length) % messages.length;
+            // REVERTED: Directly set text content, no typewriter effect here
+            messageTextDisplay.textContent = messages[currentMessageSlide];
+            messageTextDisplay.classList.add('active');
+        }
+
+        function toggleMessageAutoPlay() {
+            if (messageAutoPlaying) {
+                clearInterval(messageSlideInterval);
+                messageSlideInterval = null;
+                toggleMessagePlay.textContent = "Auto Play";
+            } else {
+                // REVERTED: Use setInterval for auto-play, as it was before typewriter integration
+                messageSlideInterval = setInterval(() => { showMessageSlide(currentMessageSlide + 1); }, 5000);
+                toggleMessagePlay.textContent = "Pause";
+            }
+            messageAutoPlaying = !messageAutoPlaying;
+        }
+
+        function stopAutoMessageIfPlaying() {
+            if (messageAutoPlaying) {
+                clearInterval(messageSlideInterval);
+                messageSlideInterval = null;
+                messageAutoPlaying = false;
+                toggleMessagePlay.textContent = "Auto Play";
+            }
+        }
+
+        // --- Polaroid Drag Logic (for individual polaroids) ---
+        let activePolaroid = null;
+        let initialX, initialY; // Mouse/touch position when drag starts
+
+        function dragStart(e) {
+            // Only start drag if the target is a polaroid-item, not a button or close button
+            if (!e.target.closest('.polaroid-item') || e.target.tagName === 'BUTTON' || e.target.closest('.close-button')) {
+                activePolaroid = null;
+                return;
+            }
+
+            activePolaroid = e.target.closest('.polaroid-item');
+            activePolaroid.classList.add('is-dragging');
+
+            const rect = activePolaroid.getBoundingClientRect();
+            // Calculate initial offset from mouse to polaroid's top-left corner
+            if (e.type.includes('mouse')) {
+                initialX = e.clientX - rect.left;
+                initialY = e.clientY - rect.top;
+            } else { // Touch event
+                initialX = e.touches[0].clientX - rect.left;
+                initialY = e.touches[0].clientY - rect.top;
+            }
+
+            // Prevent default behavior (like image dragging or text selection)
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!activePolaroid) return;
+
+            // Get current mouse/touch coordinates
+            let clientX, clientY;
+            if (e.type.includes('mouse')) {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else { // Touch event
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            // Calculate new position relative to the polaroidWrapper's top-left corner
+            // We need the polaroidWrapper's position to correctly offset
+            const wrapperRect = polaroidWrapper.getBoundingClientRect();
+            const newX = (clientX - wrapperRect.left) - initialX;
+            const newY = (clientY - wrapperRect.top) - initialY;
+
+            // Update polaroid's position
+            activePolaroid.style.left = `${newX}px`;
+            activePolaroid.style.top = `${newY}px`;
+
+            e.preventDefault(); // Prevent default touch scrolling
+        }
+
+        function dragEnd() {
+            if (activePolaroid) {
+                activePolaroid.classList.remove('is-dragging');
+                activePolaroid = null;
+            }
+        }
+
+        // Attach global listeners to document to handle drag events even if cursor leaves polaroid
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchmove', drag, { passive: false }); // passive: false for preventDefault
+        document.addEventListener('touchend', dragEnd);
+
+
+        // --- Initial Page Load Animation and Setup ---
+        kitty.classList.add('show');
+        setTimeout(() => {
+            // The initial birthday text still uses typeText for its reveal
+            typeText("Happiest Birthday Princess", "birthdayText", 80, () => {
+                setTimeout(() => {
+                    birthdayText.style.opacity = 0;
+                    kitty.style.opacity = 0;
+                    wallpaper.classList.add('show');
+                    startButton.style.pointerEvents = 'auto';
+                }, 4000);
+            });
+        }, 1500);
+
+        // --- Continuous Background Effects ---
+        setInterval(createHeart, 300);
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- Event Listeners for User Interaction ---
+        startButton.onclick = () => {
+            closeAllPopups();
+            startPopup.classList.add('show');
+        };
+
+        okButton.onclick = () => {
+            startPopup.classList.remove('show');
+            startMenu.classList.add('show');
+        };
+
+        giftItem.onclick = () => {
+            closeAllPopups();
+            giftPopup.classList.add('show');
+        };
+
+        giftPopup.onclick = () => {
+            if (!giftPopup.classList.contains('open')) {
+                giftPopup.classList.add('open');
+                createConfetti();
+                setTimeout(() => { giftMessagePopup.classList.add('show'); }, 1500);
+            }
+        };
+
+        startSlideshowBtn.onclick = () => {
+            giftMessagePopup.classList.remove('show');
+            giftPhotoSlideshow.classList.add('show');
+            showGiftSlide(0);
+            setTimeout(startAutoGiftSlide, 500);
+        };
+        giftPhotoSlideshow.onmouseover = stopAutoGiftSlide;
+        giftPhotoSlideshow.onmouseout = startAutoGiftSlide;
+        prevSlide.onclick = () => { stopAutoGiftSlide(); showGiftSlide(currentGiftSlide - 1); };
+        nextSlide.onclick = () => { stopAutoGiftSlide(); showGiftSlide(currentGiftSlide + 1); };
+
+        messageItem.onclick = () => {
+            closeAllPopups();
+            messageSlideshowPopup.classList.add('show');
+            showMessageSlide(0); // Show first message (now instantly)
+            stopAutoMessageIfPlaying(); // Ensure auto-play is stopped if not desired
+        };
+        prevMessage.onclick = () => { showMessageSlide(currentMessageSlide - 1); stopAutoMessageIfPlaying(); };
+        nextMessage.onclick = () => { showMessageSlide(currentMessageSlide + 1); stopAutoMessageIfPlaying(); };
+        toggleMessagePlay.onclick = toggleMessageAutoPlay;
+
+        dateItem.onclick = () => {
+            closeAllPopups();
+            const dateMessage = "19 April 2023 4:00 p.m. - the date the time I replied to your story about the song and emojis game that we played and started talking after that. The good morning, good night texts, the small teasing, the flirts, everything was so nice and peaceful. We saw ups, downs, and now we are in downs. Still, I am glad for that day and thankful to that GC. I can write a lot more, but here are some limitations. Anyway, that day and you were the best thing that ever happened to me.";
+            // REVERTED: Directly set text content, no typewriter effect here
+            dateMessageText.textContent = dateMessage;
+            datePopup.classList.add('show');
+        };
+
+        memoriesItem.onclick = () => {
+            closeAllPopups();
+            memoriesIntroPopup.classList.add('show');
+        };
+
+        showMemoriesGalleryBtn.onclick = () => {
+            memoriesIntroPopup.classList.remove('show');
+            polaroidGallery.classList.add('show');
+            renderPolaroids();
+        };
+
+        aboutItem.onclick = () => {
+            closeAllPopups();
+            aboutPopup.classList.add('show');
+        };
+
+        // MODIFIED: renderPolaroids for animated drop-in
+        function renderPolaroids() {
+            polaroidWrapper.innerHTML = ''; // Clear existing polaroids
+
+            // Get the actual dimensions of the polaroid-wrapper after it's shown
+            const wrapperRect = polaroidWrapper.getBoundingClientRect();
+            const availableWidth = wrapperRect.width - (20 * 2); // Account for wrapper's own padding
+            const availableHeight = wrapperRect.height - (20 * 2);
+
+            const photoWidth = 200; // max-width of polaroid-item (desktop)
+            const photoHeight = 250; // approximate max-height for polaroid with text (desktop)
+            const minPadding = 20; // Minimum space from edges and between polaroids
+
+            memoryPhotos.forEach((photo, index) => {
+                const polaroid = document.createElement('div');
+                polaroid.className = 'polaroid-item';
+                polaroid.innerHTML = `<img src="${photo.src}" alt="Memory ${index + 1}"><p>${photo.caption}</p>`;
+
+                // Calculate random positions within the available space
+                // Ensure polaroids don't go outside the wrapper
+                const xMin = minPadding;
+                const xMax = Math.max(xMin, availableWidth - polaroid.offsetWidth - minPadding); // Ensure xMax is not less than xMin
+                const yMin = minPadding;
+                const yMax = Math.max(yMin, availableHeight - polaroid.offsetHeight - minPadding); // Ensure yMax is not less than yMin
+
+                const randomX = Math.random() * (xMax - xMin) + xMin;
+                const randomY = Math.random() * (yMax - yMin) + yMin;
+
+                const rotation = (Math.random() * 20 - 10); // -10 to +10 degrees
+
+                polaroid.style.left = `${randomX}px`;
+                polaroid.style.top = `${randomY}px`;
+                // Set CSS variables for animation
+                polaroid.style.setProperty('--initial-rot', `${rotation}deg`);
+                polaroid.style.setProperty('--delay', `${index * 0.1}s`);
+                polaroid.style.zIndex = 10 + index;
+
+                // Attach drag event listener to each individual polaroid
+                polaroid.addEventListener('mousedown', dragStart);
+                polaroid.addEventListener('touchstart', dragStart, { passive: false });
+
+                polaroidWrapper.appendChild(polaroid);
+
+                // Removed setTimeout for opacity, as animation handles it
+            });
+        }
+
+        // Re-render polaroids on window resize to adjust their positions
+        window.addEventListener('resize', () => {
+            if (polaroidGallery.classList.contains('show')) {
+                renderPolaroids();
+            }
+        });
+    };
+</script>
+
+</body>
+</html>
+
